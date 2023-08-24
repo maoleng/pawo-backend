@@ -53,18 +53,13 @@ class JobService extends ApiService
     {
         return [
             'title', 'description', 'categories', 'money', 'creatorId', 'status', 'freelancerId', 'startedAt',
-            'star', 'finishedAts', 'deadline', 'createdAt',
+            'finishedAts', 'deadline', 'createdAt',
         ];
     }
 
     public function newQuery()
     {
         $query = parent::newQuery();
-
-        $fields = getFields();
-        if (in_array('star', $fields, true)) {
-            $query->with('evaluations');
-        }
 
         return $query;
     }

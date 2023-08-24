@@ -12,10 +12,4 @@ class UserController extends ApiController
         return c(UserService::class);
     }
 
-    protected function getStoreRequest()
-    {
-        return c(UserRequest::class);
-    }
-
-
 }

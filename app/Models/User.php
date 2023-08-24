@@ -29,4 +29,9 @@ class User extends Base
             ]);
     }
 
+    public function evaluations(): HasMany
+    {
+        return $this->hasMany(Evaluation::class, 'evaluatorId');
+    }
+
 }

@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Enums\JobStatus;
 use App\Models\Evaluation;
-use http\Exception\RuntimeException;
 
 class EvaluationService extends ApiService
 {
@@ -21,14 +20,19 @@ class EvaluationService extends ApiService
     protected function mapFilters(): array
     {
         return [
-            'name' => function ($value) {
+            'evaluatorId' => function ($value) {
                 return (static function ($q) use ($value) {
-                    $q->where('name', $value);
+                    $q->where('evaluatorId', $value);
                 });
             },
-            'accountId' => function ($value) {
+            'evaluatedId' => function ($value) {
                 return (static function ($q) use ($value) {
-                    $q->where('accountId', $value);
+                    $q->where('evaluatedId', $value);
+                });
+            },
+            'jobId' => function ($value) {
+                return (static function ($q) use ($value) {
+                    $q->where('jobId', $value);
                 });
             },
         ];
@@ -37,8 +41,22 @@ class EvaluationService extends ApiService
     protected function fields(): array
     {
         return [
-            'evaluatorId', 'evaluatedId', 'jobId', 'star', 'message', 'createdAt',
+            'evaluatorId', 'evaluatedId', 'jobId', 'star', 'message', 'evaluatorObj', 'evaluatedObj', 'jobObj', 'createdAt',
         ];
+    }
+
+    public function newQuery()
+    {
+        $query = parent::newQuery();
+
+        $fields = getFields();
+        $eagerFields = ['evaluatorObj', 'evaluatedObj', 'jobId'];
+        $eager = array_diff($eagerFields, $fields);
+        if (! empty($eager)) {
+            $query->with($eager);
+        }
+
+        return $query;
     }
 
     protected function boot(): void

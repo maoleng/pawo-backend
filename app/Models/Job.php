@@ -45,17 +45,9 @@ class Job extends Base
         return $this->hasMany(Evaluation::class, 'jobId');
     }
 
-    public function getStarAttribute(): float
+    public function creator(): BelongsTo
     {
-        $evaluations = $this->evaluations->where('evaluatorId', '!=', $this->creatorId);
-
-        if ($evaluations->isEmpty()) {
-            return 0;
-        }
-
-        $sumOfStars = $evaluations->sum('star');
-        $totalEvaluations = $evaluations->count();
-
-        return round($sumOfStars / $totalEvaluations, 1);
+        return $this->belongsTo(User::class, 'creatorId');
     }
+
 }

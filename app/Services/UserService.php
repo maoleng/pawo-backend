@@ -35,7 +35,7 @@ class UserService extends ApiService
     protected function fields(): array
     {
         return [
-            'name', 'rate', 'accountId', 'token', 'createdAt',
+            'name', 'rate', 'accountId', 'createdAt',
         ];
     }
 

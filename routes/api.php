@@ -31,5 +31,6 @@ Route::group(['prefix' => 'job_user'], function () {
 });
 
 Route::group(['prefix' => 'evaluation'], function () {
+    Route::get('/', [EvaluationController::class, 'index']);
     Route::post('/', [EvaluationController::class, 'store'])->middleware(ApiAuthenticate::class);
 });
