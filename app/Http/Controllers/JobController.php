@@ -20,11 +20,29 @@ class JobController extends ApiController
         return c(UpdateJobRequest::class);
     }
 
-    public function register(RegisterJobRequest $request, $id)
+    public function register(RegisterJobRequest $request, $id): array
     {
+        $user = c('authed');
         $message = $request->validated()['message'];
+
         $job = services()->jobService()->findOrFail($id);
-        dd($job);
+
+        if (! $job->users->where('id', $user->id)->isEmpty()) {
+            return [
+                'status' => false,
+                'message' => 'You have registered this job before',
+            ];
+        }
+
+        $job->users()->attach([$user->id => [
+            'message' => $message,
+            'createdAt' => now(),
+        ]]);
+
+        return [
+            'status' => true,
+            'message' => 'Register successfully',
+        ];
     }
 
 }
