@@ -10,6 +10,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Services\JobService;
 use App\Services\UserService;
+use http\Exception\RuntimeException;
 
 class JobController extends ApiController
 {
@@ -81,18 +82,12 @@ class JobController extends ApiController
     {
         $job = services()->jobService()->findOrFail($id);
         if ($job->users->where('id', c('authed')->id)->isNotEmpty()) {
-            return [
-                'status' => false,
-                'message' => 'You have registered this job before',
-            ];
+            throw new RuntimeException('You have registered this job before');
         }
 
         $checkJobStatus = services()->jobService()->allStatusFailExcept($job->status, JobStatus::PROCESSING);
         if ($checkJobStatus !== true) {
-            return [
-                'status' => true,
-                'message' => $checkJobStatus,
-            ];
+            throw new RuntimeException($checkJobStatus);
         }
         $job->status = JobStatus::PENDING;
         $job->finishedAts = array_merge($job->finishedAts ?? [], [now()->toDateTimeString()]);
@@ -101,6 +96,28 @@ class JobController extends ApiController
         return [
             'status' => true,
             'message' => 'Send payment request successfully',
+        ];
+    }
+
+    public function verifyPayment($id): array
+    {
+        $job = services()->jobService()->findOrFail($id);
+
+        if ($job->creatorId !== c('authed')->id) {
+            throw new RuntimeException('This job is not yours');
+        }
+
+        $checkJobStatus = services()->jobService()->allStatusFailExcept($job->status, JobStatus::PROCESSING);
+        if ($checkJobStatus !== true) {
+            throw new RuntimeException($checkJobStatus);
+        }
+
+        $job->status = JobStatus::PAID;
+        $job->save();
+
+        return [
+            'status' => true,
+            'message' => 'Verify payment successfully',
         ];
     }
 

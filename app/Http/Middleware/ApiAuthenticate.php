@@ -46,7 +46,7 @@ class ApiAuthenticate extends Middleware
     {
         return new JsonResponse([
             'status' => false,
-            'message' => 'Ê, mày là ai vậy ?',
+            'message' => 'Hey, who are you ?',
         ], $statusCode);
     }
 }

@@ -16,6 +16,7 @@ Route::group(['prefix' => 'job'], function () {
         Route::post('/register/{id}', [JobController::class, 'register']);
         Route::post('/choose/{id}', [JobController::class, 'choose']);
         Route::post('/request_payment/{id}', [JobController::class, 'requestPayment']);
+        Route::post('/verify_payment/{id}', [JobController::class, 'verifyPayment']);
     });
 });
 
