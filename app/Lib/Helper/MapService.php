@@ -2,6 +2,7 @@
 
 namespace App\Lib\Helper;
 
+use App\Services\EvaluationService;
 use App\Services\JobService;
 use App\Services\UserService;
 use Psr\Container\ContainerInterface;
@@ -23,6 +24,11 @@ class MapService
     public function jobService(): JobService
     {
         return c(JobService::class);
+    }
+
+    public function evaluationService(): EvaluationService
+    {
+        return c(EvaluationService::class);
     }
 
 }

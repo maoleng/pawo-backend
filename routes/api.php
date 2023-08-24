@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobUserController;
 use App\Http\Controllers\UserController;
@@ -27,4 +28,8 @@ Route::group(['prefix' => 'user'], function () {
 
 Route::group(['prefix' => 'job_user'], function () {
     Route::get('/', [JobUserController::class, 'index']);
+});
+
+Route::group(['prefix' => 'evaluation'], function () {
+    Route::post('/', [EvaluationController::class, 'store'])->middleware(ApiAuthenticate::class);
 });

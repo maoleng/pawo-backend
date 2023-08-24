@@ -82,12 +82,12 @@ class JobController extends ApiController
     {
         $job = services()->jobService()->findOrFail($id);
         if ($job->users->where('id', c('authed')->id)->isNotEmpty()) {
-            throw new RuntimeException('You have registered this job before');
+            throw new \RuntimeException('You have registered this job before');
         }
 
         $checkJobStatus = services()->jobService()->allStatusFailExcept($job->status, JobStatus::PROCESSING);
         if ($checkJobStatus !== true) {
-            throw new RuntimeException($checkJobStatus);
+            throw new \RuntimeException($checkJobStatus);
         }
         $job->status = JobStatus::PENDING;
         $job->finishedAts = array_merge($job->finishedAts ?? [], [now()->toDateTimeString()]);
@@ -104,12 +104,12 @@ class JobController extends ApiController
         $job = services()->jobService()->findOrFail($id);
 
         if ($job->creatorId !== c('authed')->id) {
-            throw new RuntimeException('This job is not yours');
+            throw new \RuntimeException('This job is not yours');
         }
 
-        $checkJobStatus = services()->jobService()->allStatusFailExcept($job->status, JobStatus::PROCESSING);
+        $checkJobStatus = services()->jobService()->allStatusFailExcept($job->status, JobStatus::PENDING);
         if ($checkJobStatus !== true) {
-            throw new RuntimeException($checkJobStatus);
+            throw new \RuntimeException($checkJobStatus);
         }
 
         $job->status = JobStatus::PAID;
