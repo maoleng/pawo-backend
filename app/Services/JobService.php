@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\JobStatus;
 use App\Models\Job;
 
 class JobService extends ApiService
@@ -24,9 +25,34 @@ class JobService extends ApiService
     protected function fields(): array
     {
         return [
-            'title', 'description', 'categories', 'money', 'creatorId', 'status', 'freelancerId', 'startedAt',
+            'id', 'title', 'description', 'categories', 'money', 'creatorId', 'status', 'freelancerId', 'startedAt',
             'finishedAt', 'deadline', 'createdAt',
         ];
+    }
+
+    protected function updateQuery()
+    {
+        $query = parent::updateQuery();
+
+        return $query->where('creatorId', c('authed')->id);
+    }
+
+    protected function destroyQuery()
+    {
+        $query = parent::updateQuery();
+
+        return $query->where('creatorId', c('authed')->id);
+    }
+
+    public function boot()
+    {
+        $this->on('creating', function ($model) {
+            $model->creatorId = c('authed')->id;
+            $model->status = JobStatus::WAITING;
+            $model->createdAt = now();
+        });
+
+
     }
 
 }

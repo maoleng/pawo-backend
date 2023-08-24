@@ -23,6 +23,16 @@ abstract class ApiService extends BaseService
         return $this->query();
     }
 
+    protected function updateQuery()
+    {
+        return $this->query();
+    }
+
+    protected function destroyQuery()
+    {
+        return $this->query();
+    }
+
     public function getMany(Request $request): array
     {
         if ((bool) $request->query->get('_noPagination') === true) {
@@ -273,7 +283,7 @@ abstract class ApiService extends BaseService
     public function update($id, array $data): Result
     {
         try {
-            $query = $this->newQuery();
+            $query = $this->updateQuery();
             $model = $query->find($id);
             if (!$model instanceof BaseModel) {
                 throw new \RuntimeException("Record not found!");
@@ -299,7 +309,7 @@ abstract class ApiService extends BaseService
     public function delete($id): Result
     {
         try {
-            $query = $this->newQuery();
+            $query = $this->destroyQuery();
             $model = $query->find($id);
             if (!$model instanceof BaseModel) {
                 throw new \RuntimeException("Record not found!");

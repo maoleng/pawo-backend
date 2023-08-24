@@ -2,8 +2,7 @@
 
 namespace App\Lib\Helper;
 
-use App\Services\ConfigService;
-use App\Services\DeviceService;
+use App\Services\JobService;
 use App\Services\UserService;
 use Psr\Container\ContainerInterface;
 
@@ -19,6 +18,11 @@ class MapService
     public function userService(): UserService
     {
         return c(UserService::class);
+    }
+
+    public function jobService(): JobService
+    {
+        return c(JobService::class);
     }
 
 }

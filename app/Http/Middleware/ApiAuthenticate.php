@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Device;
 use App\Models\User;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
@@ -23,23 +22,18 @@ class ApiAuthenticate extends Middleware
      */
     public function handle($request, Closure $next, ...$guards)
     {
-        if ($authorization = $request->headers->get('Authorization')) {
-            preg_match("/bearer ([^\ ]*)/i", $authorization, $match);
-            $token = $match[1] ?? null;
-        } else {
-            $token = $request->query->get('token');
-        }
-
-        $device = services()->deviceService()->where('token', $token)->with('user')->first();
-
-        if (!$device instanceof Device) {
+        if (! $accountId = $request->headers->get('Authorization')) {
             return $this->errorJson(Response::HTTP_UNAUTHORIZED);
         }
-
-        $user = $device->user;
-        if (!$user instanceof User || !$user->is_active) {
-            return $this->errorJson(Response::HTTP_UNAUTHORIZED);
-        }
+        $user = services()->userService()->firstOrCreate(
+            [
+                'accountId' => $accountId,
+            ],
+            [
+                'accountId' => $accountId,
+                'createdAt' => now(),
+            ],
+        );
 
         app()->singleton('authed', function () use ($user) {
             return $user;

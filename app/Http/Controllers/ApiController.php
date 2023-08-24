@@ -36,12 +36,9 @@ abstract class ApiController extends BaseController
     {
         $data = $this->getStoreData();
         $result = $this->getService()->create($data);
-
         if ($result->get('status')) {
-            $model = $result->get('model');
             return [
                 'status' => true,
-                'id' => $model instanceof BaseModel ? $model->id : null,
             ];
         }
         return [
