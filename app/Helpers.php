@@ -44,6 +44,16 @@ if (! function_exists('getFilters')) {
     }
 }
 
+if (! function_exists('getFields')) {
+    function getFields(Request $q = null): array
+    {
+        $request = $q ?? request();
+        $raw = $request->query->get('_fields', '');
+
+        return explode(',', $raw);
+    }
+}
+
 if (! function_exists('currentFunction')) {
     function currentFunction(): string
     {

@@ -229,7 +229,7 @@ abstract class ApiService extends BaseService
 
     private function item($item, array $fields): array
     {
-        $row = ['id' => $item->id];
+        $row = $item->id !== null ? ['id' => $item->id] : [];
         foreach ($fields as $field) {
             $name = "get_{$field}_value";
             $value = $item->{$field};
