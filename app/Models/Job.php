@@ -17,13 +17,14 @@ class Job extends Base
         'status',
         'freelancerId',
         'startedAt',
-        'finishedAt',
+        'finishedAts',
         'deadline',
         'createdAt',
     ];
 
     protected $casts = [
         'categories' => 'json',
+        'finishedAts' => 'json',
     ];
 
     public function users(): BelongsToMany

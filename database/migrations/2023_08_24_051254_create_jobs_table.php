@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('status');
             $table->foreignId('freelancerId')->nullable()->constrained('users');
             $table->dateTime('startedAt')->nullable();
-            $table->dateTime('finishedAt')->nullable();
+            $table->json('finishedAts')->nullable();
             $table->dateTime('deadline')->nullable();
             $table->dateTime('createdAt');
         });

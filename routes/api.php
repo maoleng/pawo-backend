@@ -9,11 +9,14 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'job'], function () {
     Route::get('/', [JobController::class, 'index']);
     Route::get('/{id}', [JobController::class, 'show']);
-    Route::post('/', [JobController::class, 'store'])->middleware(ApiAuthenticate::class);
-    Route::put('/{id}', [JobController::class, 'update'])->middleware(ApiAuthenticate::class);
-    Route::delete('/{id}', [JobController::class, 'destroy'])->middleware(ApiAuthenticate::class);
-    Route::post('/register/{id}', [JobController::class, 'register'])->middleware(ApiAuthenticate::class);
-    Route::post('/choose/{id}', [JobController::class, 'choose'])->middleware(ApiAuthenticate::class);
+    Route::group(['middleware' => ApiAuthenticate::class], function () {
+        Route::post('/', [JobController::class, 'store']);
+        Route::put('/{id}', [JobController::class, 'update']);
+        Route::delete('/{id}', [JobController::class, 'destroy']);
+        Route::post('/register/{id}', [JobController::class, 'register']);
+        Route::post('/choose/{id}', [JobController::class, 'choose']);
+        Route::post('/request_payment/{id}', [JobController::class, 'requestPayment']);
+    });
 });
 
 Route::group(['prefix' => 'user'], function () {
