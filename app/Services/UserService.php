@@ -35,7 +35,7 @@ class UserService extends ApiService
     protected function fields(): array
     {
         return [
-            'name', 'rate', 'accountId', 'createdAt',
+            'name', 'rate', 'accountId', 'starAsFreelancer', 'starAsEmployer', 'createdAt',
         ];
     }
 
@@ -43,7 +43,18 @@ class UserService extends ApiService
     {
         $query = parent::newQuery();
 
-//        $query->where('is_active', true);
+        $fields = getFields();
+        $eager = [];
+        if (in_array('starAsFreelancer', $fields, true)) {
+            $eager[] = 'evaluationsAsEvaluated';
+        }
+        if (in_array('starAsEmployer', $fields, true)) {
+            $eager[] = 'evaluationsAsEvaluator';
+        }
+        if (! empty($eager)) {
+            $query->with($eager);
+        }
+
         return $query;
     }
 

@@ -29,9 +29,40 @@ class User extends Base
             ]);
     }
 
-    public function evaluations(): HasMany
+    public function evaluationsAsEvaluated(): HasMany
+    {
+        return $this->hasMany(Evaluation::class, 'evaluatedId');
+    }
+
+    public function evaluationsAsEvaluator(): HasMany
     {
         return $this->hasMany(Evaluation::class, 'evaluatorId');
+    }
+
+    public function getStarAsFreelancerAttribute(): float
+    {
+        $evaluations = $this->evaluationsAsEvaluated->where('evaluatedId', $this->id);
+        if ($evaluations->isEmpty()) {
+            return 0;
+        }
+
+        $sumOfStars = $evaluations->sum('star');
+        $totalEvaluations = $evaluations->count();
+
+        return $sumOfStars / $totalEvaluations;
+    }
+
+    public function getStarAsEmployerAttribute(): float
+    {
+        $evaluations = $this->evaluationsAsEvaluator->where('evaluatorId', $this->id);
+        if ($evaluations->isEmpty()) {
+            return 0;
+        }
+
+        $sumOfStars = $evaluations->sum('star');
+        $totalEvaluations = $evaluations->count();
+
+        return $sumOfStars / $totalEvaluations;
     }
 
 }

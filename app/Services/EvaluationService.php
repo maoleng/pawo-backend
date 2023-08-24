@@ -50,8 +50,13 @@ class EvaluationService extends ApiService
         $query = parent::newQuery();
 
         $fields = getFields();
-        $eagerFields = ['evaluatorObj', 'evaluatedObj', 'jobId'];
-        $eager = array_diff($eagerFields, $fields);
+        $eagerFields = ['evaluatorObj', 'evaluatedObj', 'jobObj'];
+        $eager = [];
+        foreach ($eagerFields as $field) {
+            if (in_array($field, $fields, true)) {
+                $eager[] = substr($field, 0, -3);
+            }
+        }
         if (! empty($eager)) {
             $query->with($eager);
         }
