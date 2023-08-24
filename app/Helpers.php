@@ -65,11 +65,3 @@ if (! function_exists('currentFunction')) {
     }
 }
 
-
-if (! function_exists('throwError')) {
-    function throwError($error)
-    {
-        throw new \RuntimeException($error);
-    }
-}
-

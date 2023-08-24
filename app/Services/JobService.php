@@ -44,7 +44,7 @@ class JobService extends ApiService
         return $query->where('creatorId', c('authed')->id);
     }
 
-    public function boot()
+    public function boot(): void
     {
         $this->on('creating', function ($model) {
             $model->creatorId = c('authed')->id;
@@ -52,7 +52,17 @@ class JobService extends ApiService
             $model->createdAt = now();
         });
 
-
+        $this->on('updating', function ($model) {
+            $deadline = request()->get('deadline');
+            if ($deadline !== null) {
+                if (empty($model->freelancer)) {
+                    throw new \RuntimeException('There is no freelancer, please choose one then set deadline');
+                }
+                $model->status = JobStatus::PROCESSING;
+                $model->startedAt = $model->startedAt ?? now();
+                $model->deadline = $deadline;
+            }
+        });
     }
 
 }

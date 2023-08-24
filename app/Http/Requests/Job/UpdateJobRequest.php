@@ -11,17 +11,17 @@ class UpdateJobRequest extends BaseRequest
     {
         return [
             'title' => [
-                'required',
+                'nullable',
             ],
             'description' => [
-                'required',
+                'nullable',
             ],
             'categories' => [
-                'required',
+                'nullable',
                 'array',
             ],
             'money' => [
-                'required',
+                'nullable',
             ],
         ];
     }

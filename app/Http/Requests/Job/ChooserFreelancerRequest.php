@@ -12,7 +12,7 @@ class ChooserFreelancerRequest extends BaseRequest
     {
         $job = services()->jobService()->findOrFail(request()->route('id'));
         if ($job->creatorId !== c('authed')->id) {
-            return throwError('This job is not yours');
+            throw new \RuntimeException('This job is not yours');
         }
         $this->merge(['job' => $job]);
 
