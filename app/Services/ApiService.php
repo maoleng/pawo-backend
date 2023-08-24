@@ -81,10 +81,6 @@ abstract class ApiService extends BaseService
                     if ($value === 'false' || $value === '0' || $value === 0) {
                         return false;
                     }
-                // no break
-                case 'json':
-                case 'array':
-                    return json_encode($value);
                 default:
                     return $value;
             }

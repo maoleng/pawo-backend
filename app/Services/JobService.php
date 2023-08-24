@@ -19,15 +19,54 @@ class JobService extends ApiService
 
     protected function mapFilters(): array
     {
-        return [];
+        return [
+            'title' => function ($value) {
+                return (static function ($q) use ($value) {
+                    $q->where('name', 'LIKE', $value);
+                });
+            },
+            'categories' => function ($value) {
+                return static function ($q) use ($value) {
+                    $q->whereJsonContains('categories', $value);
+                };
+            },
+            'creatorId' => function ($value) {
+                return (static function ($q) use ($value) {
+                    $q->where('creatorId', $value);
+                });
+            },
+            'freelancerId' => function ($value) {
+                return (static function ($q) use ($value) {
+                    $q->where('freelancerId', $value);
+                });
+            },
+            'status' => function ($value) {
+                return (static function ($q) use ($value) {
+                    $q->where('status', $value);
+                });
+            },
+
+        ];
     }
 
     protected function fields(): array
     {
         return [
-            'id', 'title', 'description', 'categories', 'money', 'creatorId', 'status', 'freelancerId', 'startedAt',
-            'finishedAts', 'deadline', 'createdAt',
+            'title', 'description', 'categories', 'money', 'creatorId', 'status', 'freelancerId', 'startedAt',
+            'star', 'finishedAts', 'deadline', 'createdAt',
         ];
+    }
+
+    public function newQuery()
+    {
+        $query = parent::newQuery();
+
+        $fields = getFields();
+        if (in_array('star', $fields, true)) {
+            $query->with('evaluations');
+        }
+
+        return $query;
     }
 
     protected function updateQuery()

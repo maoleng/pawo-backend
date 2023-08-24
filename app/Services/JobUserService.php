@@ -51,10 +51,10 @@ class JobUserService extends ApiService
 
         $fields = getFields();
         $eager = [];
-        if (isset($fields['jobObj'])) {
+        if (in_array('jobObj', $fields, true)) {
             $eager[] = 'job';
         }
-        if (isset($fields['userObj'])) {
+        if (in_array('userObj', $fields, true)) {
             $eager[] = 'user';
         }
         if (! empty($eager)) {
