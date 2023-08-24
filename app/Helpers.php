@@ -2,8 +2,10 @@
 
 use App\Lib\Helper\MapService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 if (!function_exists('c')) {
     function c(string $key)
@@ -62,3 +64,12 @@ if (! function_exists('currentFunction')) {
         return explode('@', $action_name)[1];
     }
 }
+
+
+if (! function_exists('throwError')) {
+    function throwError($error)
+    {
+        throw new \RuntimeException($error);
+    }
+}
+

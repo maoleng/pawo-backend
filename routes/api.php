@@ -13,6 +13,7 @@ Route::group(['prefix' => 'job'], function () {
     Route::put('/{id}', [JobController::class, 'update'])->middleware(ApiAuthenticate::class);
     Route::delete('/{id}', [JobController::class, 'destroy'])->middleware(ApiAuthenticate::class);
     Route::post('/register/{id}', [JobController::class, 'register'])->middleware(ApiAuthenticate::class);
+    Route::post('/choose/{id}', [JobController::class, 'choose'])->middleware(ApiAuthenticate::class);
 });
 
 Route::group(['prefix' => 'user'], function () {

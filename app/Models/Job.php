@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Job extends Base
@@ -30,6 +31,11 @@ class Job extends Base
         return $this->belongsToMany(User::class, 'job_user', 'jobId', 'userId')->withPivot([
             'message', 'createdAt',
         ]);
+    }
+
+    public function freelancer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'freelancerId');
     }
 
 }
