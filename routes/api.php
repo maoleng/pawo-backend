@@ -12,7 +12,7 @@ Route::post('/authed', function () {
         'status' => true,
         'data' => c('authed'),
     ];
-});
+})->middleware(ApiAuthenticate::class);
 
 Route::group(['prefix' => 'job'], function () {
     Route::get('/', [JobController::class, 'index']);
