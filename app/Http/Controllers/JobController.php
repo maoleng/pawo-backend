@@ -81,8 +81,8 @@ class JobController extends ApiController
     public function requestPayment($id): array
     {
         $job = services()->jobService()->findOrFail($id);
-        if ($job->users->where('id', c('authed')->id)->isNotEmpty()) {
-            throw new \RuntimeException('You have registered this job before');
+        if ($job->users->where('id', c('authed')->id)->isEmpty()) {
+            throw new \RuntimeException('You have not registered this job before');
         }
 
         $checkJobStatus = services()->jobService()->allStatusFailExcept($job->status, JobStatus::PROCESSING);
