@@ -9,7 +9,6 @@ class User extends Base
 {
 
     protected $fillable = [
-        'id',
         'name',
         'rate',
         'accountId',
