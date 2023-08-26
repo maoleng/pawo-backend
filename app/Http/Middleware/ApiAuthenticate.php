@@ -25,15 +25,13 @@ class ApiAuthenticate extends Middleware
         if (! $accountId = $request->headers->get('Authorization')) {
             return $this->errorJson(Response::HTTP_UNAUTHORIZED);
         }
-        $user = services()->userService()->firstOrCreate(
-            [
-                'accountId' => $accountId,
-            ],
-            [
+        $user = User::query()->where('accountId', $accountId)->first();
+        if (empty($user)) {
+            $user = User::query()->create([
                 'accountId' => $accountId,
                 'createdAt' => now(),
-            ],
-        );
+            ]);
+        }
 
         app()->singleton('authed', function () use ($user) {
             return $user;
