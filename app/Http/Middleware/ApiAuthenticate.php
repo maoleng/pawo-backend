@@ -29,7 +29,7 @@ class ApiAuthenticate extends Middleware
         if (empty($user)) {
             $lastUser = User::query()->orderByDesc('id')->first();
             $user = User::query()->create([
-                'id' => $lastUser === null ? 1 : $lastUser->id++,
+                'id' => $lastUser === null ? 1 : ($lastUser->id + 1),
                 'accountId' => $accountId,
                 'createdAt' => now(),
             ]);
